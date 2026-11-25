@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Project } from "@/data/projects";
-import ProjectMockup from "./ProjectMockup";
-import { ArrowUpRight, ExternalLink } from "lucide-react";
+import { ArrowUpRight, ExternalLink, ShieldCheck } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface ProjectCardProps {
   project: Project;
@@ -10,40 +13,76 @@ interface ProjectCardProps {
   priority?: boolean;
 }
 
-export default function ProjectCard({ project, featured = false }: ProjectCardProps) {
+export default function ProjectCard({ project, featured = false, priority = false }: ProjectCardProps) {
   return (
-    <div
-      className={`group rounded-2xl border border-white/10 bg-[#0f1217] transition-all duration-300 hover:border-white/20 hover:shadow-2xl hover:shadow-black/60 flex flex-col justify-between overflow-hidden ${
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className={`group relative rounded-2xl border border-white/10 bg-[#0d1015]/90 backdrop-blur-md transition-all duration-500 hover:border-white/25 hover:shadow-2xl hover:shadow-black/70 flex flex-col justify-between overflow-hidden shimmer-card ${
         featured ? "lg:col-span-2" : ""
       }`}
     >
-      {/* Visual Component Preview */}
-      <div className="p-4 sm:p-5 pb-0 bg-gradient-to-b from-white/[0.03] to-transparent">
-        <ProjectMockup slug={project.slug} />
+      {/* Visual Reference Image Container with Browser Frame */}
+      <div className="p-3 sm:p-4 pb-0">
+        <div className="rounded-xl border border-white/10 bg-[#090b0e] overflow-hidden shadow-lg">
+          {/* Browser Chrome Header */}
+          <div className="bg-[#12161f] px-3.5 py-2 border-b border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#ef4444]/80 group-hover:bg-[#ef4444] transition-colors" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/80 group-hover:bg-[#f59e0b] transition-colors" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#10b981]/80 group-hover:bg-[#10b981] transition-colors" />
+            </div>
+
+            {/* Live Domain Bar */}
+            <div className="flex items-center gap-1.5 bg-[#090b0e] px-2.5 py-1 rounded text-[10px] font-mono text-zinc-400 border border-white/5 truncate max-w-[220px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="truncate">{project.liveDomain}</span>
+            </div>
+
+            {/* Classification Indicator */}
+            <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-300 hidden sm:inline">
+              {project.classification === "Freelance / Client Project" ? "Client Work" : "Architecture"}
+            </span>
+          </div>
+
+          {/* Reference Image Viewport */}
+          <Link href={`/work/${project.slug}`} className="block relative aspect-[16/10] overflow-hidden bg-black/40">
+            <Image
+              src={project.heroImage}
+              alt={`${project.title} live website reference visual`}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={priority}
+              unoptimized
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+            />
+            {/* Subtle Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#090b0e]/80 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity duration-300" />
+            
+            {/* Floating Internal System Pill if applicable */}
+            {project.hasInternalSystem && (
+              <div className="absolute bottom-3 left-3 bg-[#090b0e]/90 backdrop-blur-md border border-[#d4f933]/30 text-[#d4f933] text-[10px] font-mono px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg">
+                <ShieldCheck className="w-3 h-3" />
+                <span>+ {project.internalSystemType}</span>
+              </div>
+            )}
+          </Link>
+        </div>
       </div>
 
-      {/* Content & Metadata */}
-      <div className="p-6 flex flex-col flex-1 justify-between gap-5">
+      {/* Content & Action Bar */}
+      <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between gap-4">
         <div>
-          {/* Top category & classification badges */}
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="text-[10px] font-mono uppercase bg-white/5 text-zinc-300 px-2 py-0.5 rounded border border-white/10">
+          {/* Badges & Industry */}
+          <div className="flex flex-wrap items-center gap-2 mb-2">
+            <span className="text-[10px] font-mono uppercase bg-white/5 text-zinc-300 px-2.5 py-0.5 rounded-md border border-white/10">
               {project.industry}
             </span>
-            <span
-              className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
-                project.classification === "Freelance / Client Project"
-                  ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/20"
-                  : "bg-amber-500/10 text-amber-300 border-amber-500/20"
-              }`}
-            >
-              {project.classification}
+            <span className="text-[10px] font-mono text-zinc-300">
+              {project.category}
             </span>
-            {project.hasInternalSystem && (
-              <span className="text-[10px] font-mono bg-[#d4f933]/10 text-[#d4f933] px-2 py-0.5 rounded border border-[#d4f933]/20">
-                + {project.internalSystemType}
-              </span>
-            )}
           </div>
 
           {/* Project Title */}
@@ -53,22 +92,17 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
             </Link>
           </h3>
 
-          {/* Tagline / Subtitle */}
-          <p className="text-xs font-mono text-zinc-400 mt-1">
+          {/* Tagline */}
+          <p className="text-xs text-zinc-400 mt-1 line-clamp-1">
             {project.tagline}
           </p>
 
-          {/* Short Description */}
-          <p className="text-sm text-zinc-300 mt-3 line-clamp-3 leading-relaxed">
-            {project.shortDescription}
-          </p>
-
-          {/* Key capability pills */}
-          <div className="flex flex-wrap gap-1.5 mt-4">
+          {/* Quick Technology Pills */}
+          <div className="flex flex-wrap gap-1.5 mt-3.5">
             {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="text-[11px] font-mono text-zinc-400 bg-white/5 px-2 py-0.5 rounded"
+                className="text-[10px] font-mono text-zinc-300 bg-white/[0.04] px-2 py-0.5 rounded border border-white/5"
               >
                 {tech}
               </span>
@@ -76,8 +110,8 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
           </div>
         </div>
 
-        {/* Bottom Actions */}
-        <div className="pt-4 border-t border-white/5 flex items-center justify-between gap-3">
+        {/* Footer Actions */}
+        <div className="pt-3.5 border-t border-white/10 flex items-center justify-between gap-3">
           <Link
             href={`/work/${project.slug}`}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-white group-hover:text-[#d4f933] transition-colors"
@@ -91,18 +125,18 @@ export default function ProjectCard({ project, featured = false }: ProjectCardPr
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] font-mono text-zinc-400 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4f933] hover:underline"
             >
-              <span>Live Website</span>
+              <span>Visit Live</span>
               <ExternalLink className="w-3 h-3" />
             </a>
           ) : (
             <span className="text-[10px] font-mono text-zinc-400 italic">
-              Private Architecture
+              Internal Architecture
             </span>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

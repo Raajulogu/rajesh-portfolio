@@ -122,10 +122,21 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-[#090a0c] text-[#f4f4f6]">
+      <body className="min-h-full flex flex-col bg-[#08090b] text-[#f4f4f6] relative selection:bg-[#d4f933] selection:text-[#08090b]">
+        {/* Dynamic Atmospheric Background System */}
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden" aria-hidden="true">
+          {/* Subtle Technical Grid with Radial Vignette */}
+          <div className="absolute inset-0 bg-tech-grid mask-radial-vignette opacity-70" />
+          
+          {/* Ambient Glowing Orbs */}
+          <div className="absolute -top-40 right-[-10%] w-[600px] h-[600px] rounded-full glow-orb-lime animate-pulse-glow" />
+          <div className="absolute top-[35%] -left-48 w-[500px] h-[500px] rounded-full glow-orb-cyan opacity-80" />
+          <div className="absolute top-[70%] right-[-5%] w-[550px] h-[550px] rounded-full glow-orb-purple opacity-70" />
+        </div>
+
         <ScrollProgress />
         <Navbar />
-        <main className="flex-1 pt-20">
+        <main className="flex-1 pt-20 relative z-10">
           {children}
         </main>
         <Footer />

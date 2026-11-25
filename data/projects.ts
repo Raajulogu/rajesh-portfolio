@@ -6,6 +6,8 @@ export interface Project {
   category: string;
   industry: string;
   liveUrl: string | null;
+  liveDomain: string;
+  heroImage: string;
   classification: "Freelance / Client Project" | "Platform Planning & Technical Scope";
   featured: boolean;
   featuredOrder?: number;
@@ -35,6 +37,8 @@ export const PROJECTS: Project[] = [
     category: "Wholesale Product Catalogue + Private Admin Panel",
     industry: "Textiles & Manufacturing",
     liveUrl: "https://ranji-textiles.vercel.app/",
+    liveDomain: "ranji-textiles.vercel.app",
+    heroImage: "/images/projects/ranji-textiles-hero.jpg",
     classification: "Freelance / Client Project",
     featured: true,
     featuredOrder: 1,
@@ -84,6 +88,8 @@ export const PROJECTS: Project[] = [
     category: "Digital Marketing Website + Private CRM",
     industry: "Digital Marketing & Creative Agency",
     liveUrl: "https://www.lumosdigitalmedia.in/",
+    liveDomain: "lumosdigitalmedia.in",
+    heroImage: "/images/projects/lumos-digital-media-hero.webp",
     classification: "Freelance / Client Project",
     featured: true,
     featuredOrder: 2,
@@ -131,6 +137,8 @@ export const PROJECTS: Project[] = [
     category: "Transportation Website / Booking Experience",
     industry: "Transportation & Chauffeur Services",
     liveUrl: "https://smc-sigma-six.vercel.app/",
+    liveDomain: "smc-sigma-six.vercel.app",
+    heroImage: "/images/projects/singapore-maxi-cabs-hero.png",
     classification: "Freelance / Client Project",
     featured: true,
     featuredOrder: 3,
@@ -179,6 +187,8 @@ export const PROJECTS: Project[] = [
     category: "Premium Smart Home Automation Website + Private CRM",
     industry: "IoT & Smart Home Automation",
     liveUrl: "https://www.zenithautomations.in/",
+    liveDomain: "zenithautomations.in",
+    heroImage: "/images/projects/zenith-automations-hero.jpg",
     classification: "Freelance / Client Project",
     featured: true,
     featuredOrder: 4,
@@ -226,6 +236,8 @@ export const PROJECTS: Project[] = [
     category: "Smart Home, Solar & Automation Website",
     industry: "Renewable Energy & Home Technology",
     liveUrl: "https://lumiwaves.in/",
+    liveDomain: "lumiwaves.in",
+    heroImage: "/images/projects/lumiwaves-hero.jpg",
     classification: "Freelance / Client Project",
     featured: false,
     featuredRole: "Energy & Automation Website",
@@ -264,6 +276,8 @@ export const PROJECTS: Project[] = [
     category: "Design & Development Studio Website",
     industry: "Design & Creative Studio",
     liveUrl: "https://www.circledotdesign.in/",
+    liveDomain: "circledotdesign.in",
+    heroImage: "/images/projects/circledot-design-studio-hero.svg",
     classification: "Freelance / Client Project",
     featured: false,
     featuredRole: "Studio Website",
@@ -302,6 +316,8 @@ export const PROJECTS: Project[] = [
     category: "Non-profit / Community Foundation Website",
     industry: "Social Impact & Community Welfare",
     liveUrl: "https://www.vilvamfoundation.in/",
+    liveDomain: "vilvamfoundation.in",
+    heroImage: "/images/projects/vilvam-foundation-hero.jpg",
     classification: "Freelance / Client Project",
     featured: false,
     featuredRole: "Community Foundation Website",
@@ -340,6 +356,8 @@ export const PROJECTS: Project[] = [
     category: "Healthcare Website / Appointment Information",
     industry: "Healthcare & Women's Health",
     liveUrl: "https://mangai-clinic.vercel.app/",
+    liveDomain: "mangai-clinic.vercel.app",
+    heroImage: "/images/projects/mangai-clinic-hero.jpg",
     classification: "Freelance / Client Project",
     featured: false,
     featuredRole: "Healthcare Portal",
@@ -378,6 +396,8 @@ export const PROJECTS: Project[] = [
     category: "Furniture & Woodworking Business Website",
     industry: "Craftsmanship & Solid-Wood Furniture",
     liveUrl: "https://priya-woodland.vercel.app/",
+    liveDomain: "priya-woodland.vercel.app",
+    heroImage: "/images/projects/priya-woodland-hero.jpg",
     classification: "Freelance / Client Project",
     featured: false,
     featuredRole: "Craftsmanship Catalogue",
@@ -416,6 +436,8 @@ export const PROJECTS: Project[] = [
     category: "Multi-role Business Management Platform",
     industry: "Commercial Laundry & Service Operations",
     liveUrl: null,
+    liveDomain: "internal-arch://laundry-saas",
+    heroImage: "/images/projects/laundry-blueprint.svg",
     classification: "Platform Planning & Technical Scope",
     featured: false,
     featuredRole: "Architecture & Technical Scope",

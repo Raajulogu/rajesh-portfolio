@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PROJECTS, getProjectBySlug, getAllProjects } from "@/data/projects";
-import ProjectMockup from "@/components/ProjectMockup";
+import CaseStudyHero from "@/components/CaseStudyHero";
 import { 
   ArrowLeft, 
   ArrowUpRight, 
@@ -124,9 +124,9 @@ export default async function ProjectCaseStudyPage(
         </div>
       </div>
 
-      {/* Hero Visual Mockup */}
+      {/* Hero Visual Reference Mockup */}
       <div className="mb-14">
-        <ProjectMockup slug={project.slug} interactive={true} />
+        <CaseStudyHero project={project} />
       </div>
 
       {/* Compact Specifications Grid */}

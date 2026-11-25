@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090a0c;
+  --background: #08090b;
   --foreground: #f4f4f6;
-  --surface-1: #111317;
-  --surface-2: #161920;
-  --surface-3: #1d212b;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
+  --surface-1: #0f1217;
+  --surface-2: #141820;
+  --surface-3: #1a1f2c;
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-medium: rgba(255, 255, 255, 0.14);
   --border-bright: rgba(255, 255, 255, 0.25);
   --accent-lime: #d4f933;
   --accent-lime-muted: rgba(212, 249, 51, 0.12);
-  --accent-lime-glow: rgba(212, 249, 51, 0.25);
+  --accent-lime-glow: rgba(212, 249, 51, 0.28);
   --text-primary: #f4f4f6;
   --text-secondary: #a1a1aa;
   --text-tertiary: #71717a;
@@ -27,33 +27,34 @@
 html {
   color-scheme: dark;
   scroll-behavior: smooth;
-  background-color: #090a0c;
+  background-color: #08090b;
   color: #f4f4f6;
 }
 
 body {
-  background-color: #090a0c;
+  background-color: #08090b;
   color: #f4f4f6;
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
+  position: relative;
 }
 
 ::selection {
   background-color: #d4f933;
-  color: #090a0c;
+  color: #08090b;
 }
 
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090a0c;
+  background: #08090b;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -65,17 +66,97 @@ body {
   background: #3f3f46;
 }
 
-/* Subtle background grid pattern for technical editorial feel */
+/* Atmospheric background mesh grid */
 .bg-tech-grid {
-  background-size: 40px 40px;
+  background-size: 44px 44px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
 }
 
 .bg-tech-dots {
   background-size: 24px 24px;
   background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+}
+
+/* Radial Vignette mask for background grid */
+.mask-radial-vignette {
+  mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+  -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 85%);
+}
+
+/* Atmospheric Glow Orbs */
+.glow-orb-lime {
+  background: radial-gradient(circle, rgba(212, 249, 51, 0.14) 0%, rgba(212, 249, 51, 0.02) 60%, transparent 80%);
+  filter: blur(80px);
+}
+
+.glow-orb-cyan {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(56, 189, 248, 0.02) 60%, transparent 80%);
+  filter: blur(90px);
+}
+
+.glow-orb-purple {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.10) 0%, rgba(168, 85, 247, 0.01) 60%, transparent 80%);
+  filter: blur(100px);
+}
+
+/* Shimmer beam hover effect for cards */
+.shimmer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-card::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 65%
+  );
+  transform: translate3d(-100%, -100%, 0) rotate(25deg);
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.shimmer-card:hover::after {
+  transform: translate3d(100%, 100%, 0) rotate(25deg);
+}
+
+/* Floating animation */
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-slow {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+/* Pulse animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 5s ease-in-out infinite;
 }
 
 /* Focus styles for accessibility */

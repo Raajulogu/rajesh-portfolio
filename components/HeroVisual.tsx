@@ -72,7 +72,7 @@ export default function HeroVisual() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">01 // LAYER</span>
+                    <span className="text-[10px] font-mono text-zinc-400">01 &bull; LAYER</span>
                     <span className="w-2 h-2 rounded-full bg-[#d4f933]" />
                   </div>
                   <div className="font-semibold text-xs text-white">Client Touchpoints</div>
@@ -88,7 +88,7 @@ export default function HeroVisual() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">02 // LAYER</span>
+                    <span className="text-[10px] font-mono text-zinc-400">02 &bull; LAYER</span>
                     <span className="w-2 h-2 rounded-full bg-violet-400" />
                   </div>
                   <div className="font-semibold text-xs text-white">Business Engine</div>
@@ -104,7 +104,7 @@ export default function HeroVisual() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">03 // LAYER</span>
+                    <span className="text-[10px] font-mono text-zinc-400">03 &bull; LAYER</span>
                     <span className="w-2 h-2 rounded-full bg-cyan-400" />
                   </div>
                   <div className="font-semibold text-xs text-white">APIs &amp; Data</div>
