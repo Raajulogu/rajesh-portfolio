@@ -18,10 +18,10 @@ export const SITE_CONFIG = {
   headline: "I build digital products that solve real business problems.",
   subheadline: "Full-Stack Developer and Tech Lead building business websites, custom CRM systems, admin dashboards, and scalable web applications.",
   location: "Pondicherry, India",
-  siteUrl: "https://steady-starship-1285.cl.netlify.app",
+  siteUrl: "https://rajeshkumar-dev.vercel.app",
   social: {
     linkedin: "https://www.linkedin.com/in/r-rajeshkumar/",
-    portfolio: "https://steady-starship-1285.cl.netlify.app/",
+    portfolio: "https://rajeshkumar-dev.vercel.app/",
     whatsapp: "https://wa.me/?text=Hi%20Rajesh,%20I%20would%20like%20to%20discuss%20a%20web%20development%20project."
   },
   contact: {
