@@ -12,7 +12,7 @@ import { EXPERIENCES, SKILL_CATEGORIES } from "@/data/experience";
 import { SERVICES } from "@/data/services";
 import SectionHeading from "@/components/SectionHeading";
 import HeroVisual from "@/components/HeroVisual";
-import ProjectShowcase from "@/components/ProjectShowcase";
+import CircularProjectReel from "@/components/CircularProjectReel";
 import InternalSystemMockup from "@/components/InternalSystemMockup";
 import ContactForm from "@/components/ContactForm";
 
@@ -115,33 +115,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 3: VISUAL PROJECT SHOWCASE */}
+      {/* SECTION 3: 3D CIRCULAR PROJECT REEL */}
       <section id="featured-work" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-          <div>
-            <div className="inline-flex items-center gap-2 mb-2">
-              <span className="text-[11px] font-mono uppercase tracking-widest text-[#d4f933] bg-[#d4f933]/10 px-2.5 py-1 rounded border border-[#d4f933]/25 font-semibold">
-                Visual Work Showcase
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl lg:text-5xl font-bold tracking-tight text-white">
-              Selected Client Projects
-            </h2>
-            <p className="mt-2 text-sm text-zinc-300 max-w-2xl">
-              Nine verified freelance client platforms across transport, manufacturing, IoT automation, healthcare, creative studios, and community outreach.
-            </p>
-          </div>
-          <Link
-            href="/work"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#d4f933] hover:underline"
-          >
-            <span>View All Case Studies</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-
-        {/* Varied Visual Showcases with Interactive Switchers */}
-        <ProjectShowcase />
+        <CircularProjectReel />
       </section>
 
       {/* SECTION 4: WHAT I BUILD */}

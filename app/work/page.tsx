@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllProjects } from "@/data/projects";
 import ProjectCard from "@/components/ProjectCard";
-import ProjectShowcase from "@/components/ProjectShowcase";
+import CircularProjectReel from "@/components/CircularProjectReel";
 import { ArrowUpRight, ShieldCheck } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -45,9 +45,9 @@ export default function WorkPage() {
         </div>
       </div>
 
-      {/* Flagship Showcases & Visual Gallery */}
+      {/* Interactive 3D Circular Reel & Showcase */}
       <div className="mb-20">
-        <ProjectShowcase />
+        <CircularProjectReel />
       </div>
 
       {/* Additional Scoped Software Project Section */}

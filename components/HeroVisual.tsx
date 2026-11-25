@@ -1,240 +1,231 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Database, 
-  ShieldCheck, 
-  Zap, 
-  Workflow
-} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ExternalLink, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { PROJECTS } from "@/data/projects";
 
 export default function HeroVisual() {
-  const [activeNode, setActiveNode] = useState<"client" | "internal" | "realtime">("client");
-  const [systemMode, setSystemMode] = useState<"architecture" | "telemetry">("architecture");
+  const [activeProjectSlug, setActiveProjectSlug] = useState<string>("singapore-maxi-cabs");
+
+  const activeProject = PROJECTS.find((p) => p.slug === activeProjectSlug) || PROJECTS[2];
+  const companionProject1 = PROJECTS.find((p) => p.slug === "ranji-textiles")!;
+  const companionProject2 = PROJECTS.find((p) => p.slug === "zenith-automations")!;
+
+  // Interactive 3D mouse parallax
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseX = useSpring(x, { stiffness: 120, damping: 18 });
+  const mouseY = useSpring(y, { stiffness: 120, damping: 18 });
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], ["9deg", "-9deg"]);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-12deg", "12deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseXPos = (e.clientX - rect.left) / width - 0.5;
+    const mouseYPos = (e.clientY - rect.top) / height - 0.5;
+    x.set(mouseXPos);
+    y.set(mouseYPos);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <div className="relative w-full max-w-xl mx-auto lg:max-w-none">
-      {/* Ambient background glow behind visual */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-[#d4f933]/20 via-lime-500/10 to-emerald-500/20 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition duration-1000 -z-10" />
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative w-full max-w-xl mx-auto lg:max-w-none [perspective:1200px]"
+    >
+      {/* Ambient background volumetric glow */}
+      <div className="absolute -inset-4 bg-gradient-to-tr from-[#d4f933]/15 via-emerald-500/10 to-cyan-500/15 rounded-3xl blur-3xl opacity-70 pointer-events-none -z-10" />
 
-      {/* Main Console Box */}
-      <div className="relative rounded-2xl border border-white/15 bg-[#0b0d12]/95 backdrop-blur-xl shadow-2xl overflow-hidden transition-all duration-300">
-        {/* Top Console Bar */}
-        <div className="bg-[#12151d] px-4 py-3 border-b border-white/10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-            </div>
-            <span className="text-[11px] font-mono text-zinc-400 ml-2 hidden sm:inline">
-              rajeshkumar-system-engine v2.6
+      {/* 3D Motion Container */}
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d"
+        }}
+        className="relative transition-transform duration-200 ease-out"
+      >
+        {/* BACKGROUND COMPANION CARD: Zenith Luxury Smart Living (Tilted Left) */}
+        <motion.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-6 -left-6 sm:-top-8 sm:-left-8 w-60 sm:w-72 rounded-2xl border border-white/10 bg-[#090b0f]/80 backdrop-blur-xl p-3 shadow-2xl overflow-hidden -z-10 [transform:translateZ(-40px)_rotate(-5deg)] hidden sm:block"
+        >
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] font-mono text-zinc-400">
+            <span className="flex items-center gap-1.5 text-cyan-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              {companionProject2.title}
+            </span>
+            <span>IoT Platform</span>
+          </div>
+          <div className="relative aspect-[16/10] rounded-lg overflow-hidden bg-black/60">
+            <Image
+              src={companionProject2.heroImage}
+              alt="Zenith Automations preview"
+              fill
+              unoptimized
+              className="object-cover opacity-80"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <span className="absolute bottom-2 left-2 text-[10px] font-mono text-zinc-300">
+              Interactive Living Scenes
             </span>
           </div>
+        </motion.div>
 
-          {/* Mode Switcher */}
-          <div className="flex items-center gap-1 bg-[#090a0c] p-1 rounded-lg border border-white/10 text-[10px] font-mono">
-            <button
-              onClick={() => setSystemMode("architecture")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                systemMode === "architecture"
-                  ? "bg-[#d4f933] text-[#090a0c] font-bold"
-                  : "text-zinc-400 hover:text-white"
-              }`}
-            >
-              Architecture
-            </button>
-            <button
-              onClick={() => setSystemMode("telemetry")}
-              className={`px-2.5 py-1 rounded transition-colors ${
-                systemMode === "telemetry"
-                  ? "bg-[#d4f933] text-[#090a0c] font-bold"
-                  : "text-zinc-400 hover:text-white"
-              }`}
-            >
-              Live Telemetry
-            </button>
+        {/* BACKGROUND COMPANION CARD: Ranji Textiles B2B (Tilted Right) */}
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 w-60 sm:w-72 rounded-2xl border border-amber-500/20 bg-[#090b0f]/85 backdrop-blur-xl p-3 shadow-2xl overflow-hidden -z-10 [transform:translateZ(-30px)_rotate(4deg)] hidden sm:block"
+        >
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 text-[10px] font-mono text-zinc-400">
+            <span className="flex items-center gap-1.5 text-amber-400">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              {companionProject1.title}
+            </span>
+            <span>B2B Catalogue</span>
           </div>
-        </div>
+          <div className="relative aspect-[16/10] rounded-lg overflow-hidden bg-black/60">
+            <Image
+              src={companionProject1.heroImage}
+              alt="Ranji Textiles catalogue preview"
+              fill
+              unoptimized
+              className="object-cover opacity-85"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+            <span className="absolute bottom-2 left-2 text-[10px] font-mono text-zinc-300">
+              Wholesale Apparel + Admin
+            </span>
+          </div>
+        </motion.div>
 
-        {/* Console Body */}
-        <div className="p-5 sm:p-6 space-y-5">
-          {systemMode === "architecture" ? (
-            <>
-              {/* Interactive Node Tabs */}
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  onClick={() => setActiveNode("client")}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    activeNode === "client"
-                      ? "bg-[#151922] border-[#d4f933] shadow-md shadow-[#d4f933]/10"
-                      : "bg-[#10131a] border-white/5 hover:border-white/15"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">01 &bull; LAYER</span>
-                    <span className="w-2 h-2 rounded-full bg-[#d4f933]" />
-                  </div>
-                  <div className="font-semibold text-xs text-white">Client Touchpoints</div>
-                  <div className="text-[10px] text-zinc-400 truncate mt-0.5">Websites &amp; Catalogues</div>
-                </button>
-
-                <button
-                  onClick={() => setActiveNode("internal")}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    activeNode === "internal"
-                      ? "bg-[#151922] border-[#d4f933] shadow-md shadow-[#d4f933]/10"
-                      : "bg-[#10131a] border-white/5 hover:border-white/15"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">02 &bull; LAYER</span>
-                    <span className="w-2 h-2 rounded-full bg-violet-400" />
-                  </div>
-                  <div className="font-semibold text-xs text-white">Business Engine</div>
-                  <div className="text-[10px] text-zinc-400 truncate mt-0.5">CRMs &amp; Admin Panels</div>
-                </button>
-
-                <button
-                  onClick={() => setActiveNode("realtime")}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    activeNode === "realtime"
-                      ? "bg-[#151922] border-[#d4f933] shadow-md shadow-[#d4f933]/10"
-                      : "bg-[#10131a] border-white/5 hover:border-white/15"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-zinc-400">03 &bull; LAYER</span>
-                    <span className="w-2 h-2 rounded-full bg-cyan-400" />
-                  </div>
-                  <div className="font-semibold text-xs text-white">APIs &amp; Data</div>
-                  <div className="text-[10px] text-zinc-400 truncate mt-0.5">Sockets &bull; Twilio &bull; DB</div>
-                </button>
-              </div>
-
-              {/* Dynamic Interactive Node Details */}
-              <div className="rounded-xl border border-white/10 bg-[#0e1117] p-4 text-xs font-mono">
-                {activeNode === "client" && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-zinc-300">
-                      <span className="text-[#d4f933] font-semibold flex items-center gap-1.5">
-                        <Zap className="w-3.5 h-3.5" /> High-Performance Frontend Tier
-                      </span>
-                      <span className="text-[10px] text-zinc-500">React 19 &bull; Next.js 16</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-[11px] text-zinc-300">
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Speed Index:</span>
-                        <span className="text-emerald-400 font-bold">&lt; 0.8s</span>
-                      </div>
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Core Web Vitals:</span>
-                        <span className="text-emerald-400 font-bold">100 / 100</span>
-                      </div>
-                    </div>
-                    <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
-                      Engineered for high conversion: Singapore Maxi Cabs booking flow, Ranji Textiles B2B catalogue, and Zenith interactive simulation.
-                    </p>
-                  </div>
-                )}
-
-                {activeNode === "internal" && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-zinc-300">
-                      <span className="text-violet-400 font-semibold flex items-center gap-1.5">
-                        <Workflow className="w-3.5 h-3.5" /> Private Operations &amp; Back-Office
-                      </span>
-                      <span className="text-[10px] text-zinc-500">Role-Based Access Control</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-[11px] text-zinc-300">
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Lumos Agency CRM:</span>
-                        <span className="text-violet-300 font-bold">Inbound Pipeline</span>
-                      </div>
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Maxi Cabs Dispatch:</span>
-                        <span className="text-[#d4f933] font-bold">Live Flight Sync</span>
-                      </div>
-                    </div>
-                    <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
-                      Custom internal systems developed to streamline business operations, lead tracking, and administrative dispatch without expensive SaaS subscriptions.
-                    </p>
-                  </div>
-                )}
-
-                {activeNode === "realtime" && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-zinc-300">
-                      <span className="text-cyan-400 font-semibold flex items-center gap-1.5">
-                        <Database className="w-3.5 h-3.5" /> Resilient Data &amp; Real-Time Tier
-                      </span>
-                      <span className="text-[10px] text-zinc-500">Node.js &bull; MongoDB</span>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2 text-[11px] text-zinc-300">
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Socket.IO Engine:</span>
-                        <span className="text-cyan-300 font-bold">Bi-directional</span>
-                      </div>
-                      <div className="p-2 rounded bg-white/5 flex items-center justify-between">
-                        <span>Twilio SMS/Comm:</span>
-                        <span className="text-emerald-400 font-bold">Connected</span>
-                      </div>
-                    </div>
-                    <p className="text-[11px] text-zinc-400 font-sans leading-relaxed">
-                      Real-time communication, automated notification webhooks, structured RESTful endpoints, and relational/document database schemas.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            /* Live Telemetry View */
-            <div className="space-y-3 font-mono text-xs">
-              <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 rounded-lg bg-[#121620] border border-white/5">
-                  <span className="text-[9px] text-zinc-400 block mb-0.5">SYSTEM HEALTH</span>
-                  <span className="font-bold text-emerald-400 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                    99.98%
-                  </span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-[#121620] border border-white/5">
-                  <span className="text-[9px] text-zinc-400 block mb-0.5">AVG LATENCY</span>
-                  <span className="font-bold text-[#d4f933]">14ms Global</span>
-                </div>
-                <div className="p-2.5 rounded-lg bg-[#121620] border border-white/5">
-                  <span className="text-[9px] text-zinc-400 block mb-0.5">DEPLOYMENTS</span>
-                  <span className="font-bold text-white">9 Verified Sites</span>
-                </div>
-              </div>
-
-              <div className="p-3 rounded-lg bg-[#121620] border border-white/5 space-y-1.5 text-[11px]">
-                <div className="flex justify-between text-zinc-300">
-                  <span className="text-zinc-400">Pondicherry Development Hub:</span>
-                  <span className="text-emerald-400">ONLINE</span>
-                </div>
-                <div className="flex justify-between text-zinc-300">
-                  <span className="text-zinc-400">Salem Technical Ownership:</span>
-                  <span className="text-emerald-400">ACTIVE (SeedataMD)</span>
-                </div>
-                <div className="flex justify-between text-zinc-300">
-                  <span className="text-zinc-400">Security Architecture:</span>
-                  <span className="text-[#d4f933]">Zero Private Data Exposed</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Bottom Connectivity Bar */}
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-zinc-400">
+        {/* MAIN FOREGROUND SPOTLIGHT: Interactive Project Browser Frame */}
+        <div className="relative rounded-2xl border border-white/15 bg-[#0b0e14]/95 backdrop-blur-2xl shadow-2xl overflow-hidden [transform:translateZ(20px)] transition-all duration-300 group">
+          {/* Top Browser Bar */}
+          <div className="bg-[#121620] px-4 py-3 border-b border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#d4f933]" />
-              <span>Full-Stack Engineering &amp; Technical Leadership</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              </div>
+              <span className="text-[11px] font-mono text-zinc-400 ml-2 truncate max-w-[150px] sm:max-w-none">
+                https://{activeProject.liveDomain}
+              </span>
             </div>
-            <span className="text-[#d4f933] font-semibold">Available for Q1 2027</span>
+
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#d4f933] bg-[#d4f933]/10 px-2.5 py-0.5 rounded-full border border-[#d4f933]/25">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d4f933] animate-pulse" />
+                Live Production
+              </span>
+            </div>
+          </div>
+
+          {/* Featured Visual Image Viewport */}
+          <div className="relative aspect-[16/10] sm:aspect-[16/9.5] w-full overflow-hidden bg-black/50">
+            <Image
+              src={activeProject.heroImage}
+              alt={`${activeProject.title} flagship project visual`}
+              fill
+              priority
+              unoptimized
+              className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-102"
+            />
+            {/* Subtle Vignette Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent opacity-60" />
+
+            {/* Bottom floating details inside image viewport */}
+            <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-3">
+              <div className="space-y-1 bg-black/75 backdrop-blur-md px-3.5 py-2 rounded-xl border border-white/10 max-w-[260px] sm:max-w-xs">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-white truncate">
+                    {activeProject.title}
+                  </span>
+                  {activeProject.hasInternalSystem && (
+                    <span className="text-[9px] font-mono text-[#d4f933] bg-[#d4f933]/15 px-1.5 py-0.2 rounded border border-[#d4f933]/20">
+                      + CRM
+                    </span>
+                  )}
+                </div>
+                <p className="text-[10px] text-zinc-300 font-mono truncate">
+                  {activeProject.tagline}
+                </p>
+              </div>
+
+              {activeProject.liveUrl && (
+                <a
+                  href={activeProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#d4f933] text-black font-semibold text-xs px-3.5 py-2 rounded-xl shadow-lg flex items-center gap-1.5 hover:bg-[#bde322] transition-colors shrink-0"
+                >
+                  <span className="hidden sm:inline">Visit Site</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* Quick Showcase Switcher Pills */}
+          <div className="p-3 sm:p-4 bg-[#0e1219] border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5">
+              {[
+                { slug: "singapore-maxi-cabs", label: "Maxi Cabs" },
+                { slug: "zenith-automations", label: "Zenith IoT" },
+                { slug: "ranji-textiles", label: "Ranji B2B" },
+                { slug: "lumos-digital-media", label: "Lumos Agency" }
+              ].map((item) => (
+                <button
+                  key={item.slug}
+                  onClick={() => setActiveProjectSlug(item.slug)}
+                  className={`text-[11px] font-mono px-2.5 py-1 rounded-md transition-all ${
+                    activeProjectSlug === item.slug
+                      ? "bg-[#d4f933] text-black font-bold shadow-md shadow-[#d4f933]/20"
+                      : "text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            <Link
+              href={`/work/${activeProject.slug}`}
+              className="text-[11px] font-mono text-zinc-300 hover:text-white flex items-center gap-1 transition-colors"
+            >
+              <span>Case Study</span>
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#d4f933]" />
+            </Link>
           </div>
         </div>
-      </div>
+
+        {/* Floating Verified Trust Pill */}
+        <motion.div
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-4 left-6 bg-[#121620]/95 backdrop-blur-xl border border-white/15 px-3 py-1.5 rounded-full text-[10px] font-mono text-zinc-300 flex items-center gap-2 shadow-2xl hidden sm:flex"
+        >
+          <ShieldCheck className="w-3.5 h-3.5 text-[#d4f933]" />
+          <span>Independent Freelance Deployments</span>
+          <span className="text-zinc-600">&bull;</span>
+          <span className="text-emerald-400">9 Active Sites</span>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }
