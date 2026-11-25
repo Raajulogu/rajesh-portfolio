@@ -14,18 +14,16 @@ import {
   ArrowRight
 } from "lucide-react";
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
     slug: project.slug,
   }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata(
+  props: PageProps<"/work/[slug]">
+): Promise<Metadata> {
+  const { slug } = await props.params;
   const project = getProjectBySlug(slug);
 
   if (!project) {
@@ -49,8 +47,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function ProjectCaseStudyPage({ params }: PageProps) {
-  const { slug } = await params;
+export default async function ProjectCaseStudyPage(
+  props: PageProps<"/work/[slug]">
+) {
+  const { slug } = await props.params;
   const project = getProjectBySlug(slug);
 
   if (!project) {
