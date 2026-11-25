@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS, SITE_CONFIG } from "@/data/site";
-import { Menu, X, ArrowUpRight, Code2 } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import BrandLogo from "./BrandLogo";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -32,12 +33,10 @@ export default function Navbar() {
           {/* Logo & Identity */}
           <Link
             href="/"
-            className="group flex items-center gap-3 transition-opacity hover:opacity-90"
+            className="group flex items-center gap-3 transition-opacity hover:opacity-95"
             aria-label="Rajeshkumar R. - Home"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#161920] border border-white/10 flex items-center justify-center text-[#d4f933] group-hover:border-[#d4f933]/50 transition-colors">
-              <Code2 className="w-4 h-4" />
-            </div>
+            <BrandLogo size="md" />
             <div className="flex flex-col">
               <span className="text-sm font-semibold tracking-tight text-white group-hover:text-[#d4f933] transition-colors">
                 {SITE_CONFIG.name}

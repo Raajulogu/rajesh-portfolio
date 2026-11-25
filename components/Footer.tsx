@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { SITE_CONFIG, NAV_LINKS } from "@/data/site";
 import { ArrowUpRight, MessageSquare, Mail, MapPin, ShieldCheck } from "lucide-react";
+import BrandLogo from "./BrandLogo";
 
 const LinkedInIcon = ({ className = "w-3.5 h-3.5" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -19,7 +20,8 @@ export default function Footer() {
           {/* Identity & Main Positioning */}
           <div className="lg:col-span-2 flex flex-col justify-between">
             <div>
-              <div className="flex items-center gap-2 mb-3">
+              <div className="flex items-center gap-2.5 mb-3">
+                <BrandLogo size="sm" />
                 <span className="text-lg font-bold tracking-tight text-white">
                   {SITE_CONFIG.name}
                 </span>

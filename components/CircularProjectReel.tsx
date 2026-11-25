@@ -14,7 +14,8 @@ import {
   Eye, 
   Database,
   LayoutGrid,
-  RotateCcw
+  RotateCcw,
+  MoveHorizontal
 } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
 import ProjectCard from "./ProjectCard";
@@ -24,6 +25,7 @@ export default function CircularProjectReel() {
   const [viewMode, setViewMode] = useState<"circle" | "grid">("circle");
   const [activeTab, setActiveTab] = useState<"website" | "admin">("website");
   const [isDragging, setIsDragging] = useState(false);
+  const [windowWidth, setWindowWidth] = useState<number>(1280);
   const dragStartX = useRef<number | null>(null);
 
   // All 9 public client projects
@@ -31,6 +33,14 @@ export default function CircularProjectReel() {
     (p) => p.classification === "Freelance / Client Project"
   );
   const total = clientProjects.length;
+
+  // Track window resize for responsive 3D radius calculation
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Rotate functions
   const nextProject = useCallback(() => {
@@ -80,6 +90,75 @@ export default function CircularProjectReel() {
     setTimeout(() => setIsDragging(false), 50);
   };
 
+  // Calculate Responsive 3D Geometry for Expansive Big-Screen Radius
+  const getCircleTransforms = (offset: number) => {
+    if (offset === 0) {
+      return {
+        x: 0,
+        z: 0,
+        rotY: 0,
+        scale: 1,
+        opacity: 1,
+        zIndex: 40
+      };
+    }
+
+    // Dynamic horizontal spread, depth step, and rotation angle by screen size
+    let spread = 220;
+    let depthStep = 110;
+    let angleStep = 22;
+
+    if (windowWidth >= 1536) {
+      // 2XL / Ultrawide Displays: Vast Grand Rotunda
+      spread = 640;
+      depthStep = 300;
+      angleStep = 38;
+    } else if (windowWidth >= 1280) {
+      // XL Big Desktop: Generous Wide Radius
+      spread = 560;
+      depthStep = 260;
+      angleStep = 35;
+    } else if (windowWidth >= 1024) {
+      // Laptop / Desktop
+      spread = 460;
+      depthStep = 220;
+      angleStep = 32;
+    } else if (windowWidth >= 768) {
+      // Tablet Landscape
+      spread = 360;
+      depthStep = 170;
+      angleStep = 28;
+    } else if (windowWidth >= 640) {
+      // Tablet Portrait
+      spread = 280;
+      depthStep = 140;
+      angleStep = 25;
+    }
+
+    const isAdjacent = Math.abs(offset) === 1;
+
+    if (isAdjacent) {
+      return {
+        x: offset * spread,
+        z: -depthStep,
+        rotY: offset * -angleStep,
+        scale: windowWidth >= 1024 ? 0.88 : 0.82,
+        opacity: 0.72,
+        zIndex: 30
+      };
+    }
+
+    // Outer ring cards (offset = ±2)
+    return {
+      x: offset * (spread * 1.58),
+      z: -(depthStep * 1.85),
+      rotY: offset * (-angleStep * 1.4),
+      scale: windowWidth >= 1024 ? 0.72 : 0.64,
+      opacity: 0.32,
+      zIndex: 20
+    };
+  };
+
   return (
     <div className="space-y-8 select-none">
       {/* Top Header & View Controls */}
@@ -89,8 +168,9 @@ export default function CircularProjectReel() {
             <span className="text-[10px] font-mono uppercase tracking-widest text-[#d4f933] bg-[#d4f933]/10 px-2.5 py-0.5 rounded-full border border-[#d4f933]/25 font-semibold">
               Interactive 3D Carousel
             </span>
-            <span className="text-xs font-mono text-zinc-400">
-              Drag horizontally or click cards to roll
+            <span className="text-xs font-mono text-zinc-400 flex items-center gap-1.5">
+              <MoveHorizontal className="w-3.5 h-3.5 text-[#d4f933]" />
+              <span>Drag horizontally or click cards to roll</span>
             </span>
           </div>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white flex items-center gap-3">
@@ -131,7 +211,7 @@ export default function CircularProjectReel() {
 
           {/* Previous / Next Arrow Controls */}
           {viewMode === "circle" && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <button
                 onClick={prevProject}
                 aria-label="Previous project"
@@ -152,19 +232,19 @@ export default function CircularProjectReel() {
       </div>
 
       {/* ------------------------------------------------------------- */}
-      {/* 3D CIRCULAR CAROUSEL REEL STAGE */}
+      {/* 3D EXPANSIVE CIRCULAR CAROUSEL REEL STAGE */}
       {/* ------------------------------------------------------------- */}
       {viewMode === "circle" ? (
-        <div className="relative py-6 sm:py-10 overflow-hidden">
-          {/* Subtle Ambient Stage Lighting */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-[#d4f933]/8 rounded-full blur-[120px] pointer-events-none -z-10" />
+        <div className="relative py-4 sm:py-8 overflow-hidden">
+          {/* Panoramic Ambient Stage Lighting */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[400px] bg-[#d4f933]/6 rounded-full blur-[140px] pointer-events-none -z-10" />
 
-          {/* Perspective 3D Carousel Stage */}
+          {/* 3D Circular Arena Stage with Wide Perspective */}
           <div
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
-            className="relative h-[480px] sm:h-[540px] lg:h-[580px] w-full flex items-center justify-center [perspective:1400px] cursor-grab active:cursor-grabbing touch-pan-y"
+            className="relative h-[520px] sm:h-[600px] lg:h-[680px] xl:h-[720px] w-full flex items-center justify-center [perspective:1800px] sm:[perspective:2200px] lg:[perspective:2600px] cursor-grab active:cursor-grabbing touch-pan-y"
           >
             {clientProjects.map((project, index) => {
               // Calculate shortest circular offset from activeIndex
@@ -173,21 +253,11 @@ export default function CircularProjectReel() {
               if (offset < -total / 2) offset += total;
 
               const isCenter = offset === 0;
-              const isAdjacent = Math.abs(offset) === 1;
               const isVisible = Math.abs(offset) <= 2;
 
               if (!isVisible) return null;
 
-              // Compute cylindrical 3D geometry
-              // Center card: x=0, z=0, rotateY=0
-              // Right cards: x>0, z<0, rotateY negative (curving back)
-              // Left cards: x<0, z<0, rotateY positive (curving back)
-              const xPos = offset * 360;
-              const zPos = -Math.abs(offset) * 200;
-              const rotY = offset * -32;
-              const scale = isCenter ? 1 : isAdjacent ? 0.84 : 0.68;
-              const opacity = isCenter ? 1 : isAdjacent ? 0.65 : 0.3;
-              const zIndex = isCenter ? 40 : isAdjacent ? 30 : 20;
+              const { x, z, rotY, scale, opacity, zIndex } = getCircleTransforms(offset);
 
               return (
                 <motion.div
@@ -199,27 +269,27 @@ export default function CircularProjectReel() {
                     }
                   }}
                   animate={{
-                    x: xPos,
-                    z: zPos,
+                    x,
+                    z,
                     rotateY: rotY,
-                    scale: scale,
-                    opacity: opacity
+                    scale,
+                    opacity
                   }}
                   transition={{
                     type: "spring",
-                    stiffness: 260,
-                    damping: 28,
+                    stiffness: 240,
+                    damping: 26,
                     mass: 0.8
                   }}
                   style={{
                     position: "absolute",
-                    zIndex: zIndex,
+                    zIndex,
                     transformStyle: "preserve-3d"
                   }}
-                  className={`w-[90%] max-w-[420px] sm:max-w-[560px] lg:max-w-[640px] rounded-3xl border transition-colors duration-300 ${
+                  className={`w-[88%] max-w-[360px] sm:max-w-[480px] md:max-w-[560px] lg:max-w-[680px] xl:max-w-[760px] rounded-3xl border transition-colors duration-300 ${
                     isCenter
-                      ? "border-white/20 bg-[#0c0f16]/95 backdrop-blur-2xl shadow-2xl shadow-black/80 cursor-default"
-                      : "border-white/10 bg-[#090b10]/80 backdrop-blur-md cursor-pointer hover:border-white/30"
+                      ? "border-white/20 bg-[#0c0f16]/95 backdrop-blur-2xl shadow-2xl shadow-black/85 cursor-default ring-1 ring-white/10"
+                      : "border-white/10 bg-[#090b10]/80 backdrop-blur-md cursor-pointer hover:border-white/30 hover:brightness-110"
                   }`}
                 >
                   {/* Browser Mockup Chrome Header */}
@@ -284,10 +354,10 @@ export default function CircularProjectReel() {
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
-                          className="p-5 sm:p-6 bg-[#0c0e14] h-full flex flex-col justify-between"
+                          className="p-5 sm:p-7 bg-[#0c0e14] h-full flex flex-col justify-between"
                         >
                           <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                            <span className="text-xs font-mono font-bold text-white flex items-center gap-2">
+                            <span className="text-xs sm:text-sm font-mono font-bold text-white flex items-center gap-2">
                               <span className="w-2 h-2 rounded-full bg-[#d4f933] animate-pulse" />
                               {project.internalSystemType}
                             </span>
@@ -296,22 +366,22 @@ export default function CircularProjectReel() {
                             </span>
                           </div>
 
-                          <div className="grid grid-cols-3 gap-2.5 my-3">
-                            <div className="bg-[#141822] p-2.5 rounded-lg border border-white/5 text-center">
+                          <div className="grid grid-cols-3 gap-3 my-4">
+                            <div className="bg-[#141822] p-3 rounded-xl border border-white/5 text-center">
                               <span className="text-[10px] font-mono text-zinc-400 block">Status</span>
-                              <span className="text-xs font-bold text-emerald-400">Operational</span>
+                              <span className="text-xs sm:text-sm font-bold text-emerald-400">Operational</span>
                             </div>
-                            <div className="bg-[#141822] p-2.5 rounded-lg border border-white/5 text-center">
+                            <div className="bg-[#141822] p-3 rounded-xl border border-white/5 text-center">
                               <span className="text-[10px] font-mono text-zinc-400 block">Access</span>
-                              <span className="text-xs font-bold text-[#d4f933]">Role-Based</span>
+                              <span className="text-xs sm:text-sm font-bold text-[#d4f933]">Role-Based</span>
                             </div>
-                            <div className="bg-[#141822] p-2.5 rounded-lg border border-white/5 text-center">
+                            <div className="bg-[#141822] p-3 rounded-xl border border-white/5 text-center">
                               <span className="text-[10px] font-mono text-zinc-400 block">Security</span>
-                              <span className="text-xs font-bold text-sky-400">Isolated</span>
+                              <span className="text-xs sm:text-sm font-bold text-sky-400">Isolated</span>
                             </div>
                           </div>
 
-                          <p className="text-xs text-zinc-300 leading-relaxed font-sans line-clamp-3">
+                          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans line-clamp-3">
                             {project.internalSystemDescription}
                           </p>
                         </motion.div>
@@ -336,7 +406,7 @@ export default function CircularProjectReel() {
                           {/* Floating Badges */}
                           <div className="absolute top-3 right-3 flex items-center gap-1.5">
                             {project.hasInternalSystem && (
-                              <span className="bg-[#090b0e]/90 backdrop-blur-md border border-[#d4f933]/30 text-[#d4f933] text-[9px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1">
+                              <span className="bg-[#090b0e]/90 backdrop-blur-md border border-[#d4f933]/30 text-[#d4f933] text-[9px] font-mono px-2 py-0.5 rounded-full flex items-center gap-1 shadow-lg">
                                 <ShieldCheck className="w-2.5 h-2.5" />
                                 <span>+ {project.internalSystemType}</span>
                               </span>
@@ -360,7 +430,7 @@ export default function CircularProjectReel() {
                             Freelance Project
                           </span>
                         </div>
-                        <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white tracking-tight">
                           <Link href={`/work/${project.slug}`}>
                             {project.title}
                           </Link>
@@ -373,7 +443,7 @@ export default function CircularProjectReel() {
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 bg-[#d4f933] text-black font-bold text-xs px-3.5 py-2 rounded-xl shadow-lg hover:bg-[#bce022] transition-colors"
+                          className="inline-flex items-center gap-1.5 bg-[#d4f933] text-black font-bold text-xs px-4 py-2 rounded-xl shadow-lg hover:bg-[#bce022] transition-colors"
                         >
                           <span>Visit Live Website</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -381,7 +451,7 @@ export default function CircularProjectReel() {
                       )}
                     </div>
 
-                    <p className="text-xs text-zinc-300 font-sans line-clamp-2 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-zinc-300 font-sans line-clamp-2 leading-relaxed">
                       {project.shortDescription}
                     </p>
 
@@ -391,7 +461,7 @@ export default function CircularProjectReel() {
                         {project.technologies.slice(0, 4).map((tech) => (
                           <span
                             key={tech}
-                            className="text-[10px] font-mono text-zinc-300 bg-white/5 px-2 py-0.5 rounded border border-white/5"
+                            className="text-[10px] font-mono text-zinc-300 bg-white/5 px-2.5 py-0.5 rounded border border-white/5"
                           >
                             {tech}
                           </span>
@@ -414,7 +484,7 @@ export default function CircularProjectReel() {
 
           {/* Bottom Circular Project Navigation Track */}
           <div className="mt-8 flex flex-col items-center gap-3">
-            <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl px-4">
+            <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl px-4">
               {clientProjects.map((p, i) => (
                 <button
                   key={p.id}
@@ -422,7 +492,7 @@ export default function CircularProjectReel() {
                     setActiveIndex(i);
                     setActiveTab("website");
                   }}
-                  className={`text-xs font-mono px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 ${
+                  className={`text-xs font-mono px-3.5 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1.5 ${
                     activeIndex === i
                       ? "bg-[#d4f933] text-black font-bold shadow-md shadow-[#d4f933]/25 scale-105"
                       : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10 border border-white/5"
@@ -435,7 +505,7 @@ export default function CircularProjectReel() {
             </div>
 
             <span className="text-[11px] font-mono text-zinc-500">
-              Drag left or right to rotate &bull; Use &larr; &rarr; arrow keys &bull; Normal vertical scroll preserved
+              Drag left or right to roll cylinder &bull; Click adjacent cards &bull; Use &larr; &rarr; arrow keys
             </span>
           </div>
         </div>
