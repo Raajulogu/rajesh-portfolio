@@ -23,8 +23,9 @@ export async function generateStaticParams() {
 export async function generateMetadata(
   props: PageProps<"/work/[slug]">
 ): Promise<Metadata> {
-  const { slug } = await props.params;
-  const project = getProjectBySlug(slug);
+  const resolvedParams = await props?.params;
+  const slug = resolvedParams?.slug;
+  const project = slug ? getProjectBySlug(slug) : undefined;
 
   if (!project) {
     return {
@@ -50,8 +51,9 @@ export async function generateMetadata(
 export default async function ProjectCaseStudyPage(
   props: PageProps<"/work/[slug]">
 ) {
-  const { slug } = await props.params;
-  const project = getProjectBySlug(slug);
+  const resolvedParams = await props?.params;
+  const slug = resolvedParams?.slug;
+  const project = slug ? getProjectBySlug(slug) : undefined;
 
   if (!project) {
     notFound();

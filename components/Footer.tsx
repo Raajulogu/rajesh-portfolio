@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { SITE_CONFIG, NAV_LINKS } from "@/data/site";
-import { ArrowUpRight, MessageSquare, Mail, Globe, MapPin, ShieldCheck } from "lucide-react";
+import { ArrowUpRight, MessageSquare, Mail, MapPin, ShieldCheck } from "lucide-react";
 
 const LinkedInIcon = ({ className = "w-3.5 h-3.5" }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -141,19 +141,6 @@ export default function Footer() {
                 </div>
                 <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-[#d4f933] transition-colors" />
               </Link>
-
-              <a
-                href={SITE_CONFIG.social.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between text-xs font-medium p-2.5 rounded-lg bg-[#12151b] border border-white/5 hover:border-white/20 text-zinc-200 hover:text-white transition-all group"
-              >
-                <div className="flex items-center gap-2">
-                  <Globe className="w-3.5 h-3.5 text-zinc-400" />
-                  <span>Deployment Mirror</span>
-                </div>
-                <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-[#d4f933] transition-colors" />
-              </a>
             </div>
           </div>
         </div>

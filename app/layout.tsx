@@ -85,8 +85,7 @@ export default function RootLayout({
           addressCountry: "India"
         },
         sameAs: [
-          SITE_CONFIG.social.linkedin,
-          SITE_CONFIG.social.portfolio
+          SITE_CONFIG.social.linkedin
         ],
         knowsAbout: [
           "Full-Stack Web Development",

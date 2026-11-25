@@ -4,9 +4,7 @@ import {
   MessageSquare, 
   MapPin, 
   Clock, 
-  ShieldCheck, 
-  ArrowUpRight, 
-  Globe
+  ArrowUpRight
 } from "lucide-react";
 import { SITE_CONFIG } from "@/data/site";
 import ContactForm from "@/components/ContactForm";
@@ -89,23 +87,6 @@ export default function ContactPage() {
                 </div>
                 <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-sky-400" />
               </a>
-
-              {/* Deployment Mirror */}
-              <a
-                href={SITE_CONFIG.social.portfolio}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-xl bg-[#141822] border border-white/5 hover:border-white/20 transition-all group"
-              >
-                <div className="flex items-center gap-2.5">
-                  <Globe className="w-4 h-4 text-zinc-400" />
-                  <div>
-                    <div className="font-semibold text-white">Online Portfolio</div>
-                    <div className="text-[11px] text-zinc-400">Deployment Mirror</div>
-                  </div>
-                </div>
-                <ArrowUpRight className="w-3.5 h-3.5 text-zinc-500 group-hover:text-white" />
-              </a>
             </div>
           </div>
 
@@ -129,14 +110,6 @@ export default function ContactPage() {
                 <div>
                   <span className="text-zinc-500 block text-[10px] uppercase">Response SLA:</span>
                   <span>Within 24 Hours on business days</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-zinc-500 block text-[10px] uppercase">Confidentiality:</span>
-                  <span>NDAs respected for proprietary business workflows</span>
                 </div>
               </div>
             </div>
