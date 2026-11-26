@@ -7,6 +7,7 @@ import {
   ShieldCheck
 } from "lucide-react";
 import { SERVICES } from "@/data/services";
+import InteractiveProcess from "@/components/InteractiveProcess";
 
 export const metadata: Metadata = {
   title: "Website & Custom Software Development Services | Rajeshkumar R.",
@@ -129,6 +130,23 @@ export default function ServicesPage() {
           </section>
         ))}
       </div>
+
+      {/* Interactive Process & Engineering Delivery Lifecycle */}
+      <section className="mb-20">
+        <div className="mb-8">
+          <span className="text-[11px] font-mono uppercase tracking-widest text-[#d4f933] bg-[#d4f933]/10 px-2.5 py-1 rounded border border-[#d4f933]/25 font-semibold inline-block mb-2">
+            Engineering Methodology
+          </span>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+            How I Build — 6-Phase Delivery Framework
+          </h2>
+          <p className="text-xs sm:text-sm text-zinc-400">
+            A structured, predictable development lifecycle ensuring clean deliverables from discovery to production.
+          </p>
+        </div>
+
+        <InteractiveProcess />
+      </section>
 
       {/* Bottom CTA */}
       <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-[#12151b] via-[#161a22] to-[#12151b] border border-white/10 text-center flex flex-col items-center">

@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { motion } from "framer-motion";
 
 interface SectionHeadingProps {
   badge?: string;
@@ -18,7 +21,13 @@ export default function SectionHeading({
   const isCenter = align === "center";
 
   return (
-    <div className={`mb-10 lg:mb-14 ${isCenter ? "text-center max-w-2xl mx-auto" : "max-w-3xl"} ${className}`}>
+    <motion.div
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className={`mb-10 lg:mb-14 ${isCenter ? "text-center max-w-2xl mx-auto" : "max-w-3xl"} ${className}`}
+    >
       {badge && (
         <div className={`inline-flex items-center gap-2 mb-3 ${isCenter ? "justify-center" : ""}`}>
           <span className="text-[11px] font-mono uppercase tracking-widest text-[#d4f933] bg-[#d4f933]/10 px-2.5 py-1 rounded border border-[#d4f933]/25 font-semibold">
@@ -34,6 +43,6 @@ export default function SectionHeading({
           {description}
         </p>
       )}
-    </div>
+    </motion.div>
   );
 }
